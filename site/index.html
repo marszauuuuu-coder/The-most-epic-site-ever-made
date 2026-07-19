@@ -6,6 +6,8 @@
     <title>The most epic site ever made</title>
     <!-- Połączenie z osobnym plikiem CSS -->
     <link rel="stylesheet" href="style.css">
+    <!-- DODANO: Oficjalna biblioteka Supabase niezbędna do działania script.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -25,6 +27,31 @@
         <h1 id="main-title">Najbardziej epicka strona, jaka kiedykolwiek powstała</h1>
         <p id="main-desc">Witamy w cyfrowym arcydziele. Ta strona została stworzona, aby zachwycać, inspirować i przekraczać granice zwykłego internetu. Poczuj czystą moc nowoczesnego designu.</p>
         <button class="epic-btn" id="main-btn" onclick="epicAction()">Doświadcz Epickości</button>
+
+        <!-- DODANO: Szklany formularz logowania i rejestracji Supabase -->
+        <section id="auth-container" class="glass-card" style="margin-top: 3rem;">
+            <div class="auth-box">
+                <h2 style="margin-bottom: 0.5rem;">Witaj z powrotem</h2>
+                <p class="auth-subtitle" style="margin-bottom: 1.5rem;">Zaloguj się lub utwórz nowe konto</p>
+                
+                <div class="input-group" style="margin-bottom: 1rem; text-align: left;">
+                    <label for="auth-email" style="display: block; margin-bottom: 0.5rem;">Adres e-mail</label>
+                    <input type="email" id="auth-email" placeholder="nazwa@domena.pl" required>
+                </div>
+                
+                <div class="input-group" style="margin-bottom: 1.5rem; text-align: left;">
+                    <label for="auth-password" style="display: block; margin-bottom: 0.5rem;">Hasło</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" required>
+                </div>
+                
+                <div class="auth-buttons" style="display: flex; gap: 1rem;">
+                    <button type="button" id="btn-login" class="btn-primary">Zaloguj się</button>
+                    <button type="button" id="btn-register" class="btn-secondary">Zarejestruj</button>
+                </div>
+                
+                <p id="auth-status" style="margin-top: 1rem; min-height: 1.2rem; font-weight: 500;"></p>
+            </div>
+        </section>
     </div>
 
     <!-- Epicka Przeglądarka Zdjęć -->
