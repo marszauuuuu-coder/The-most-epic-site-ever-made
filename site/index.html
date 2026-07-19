@@ -3,44 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Logowania & Rejestracji</title>
-    <!-- Połączenie z arkuszem stylów CSS -->
+    <title>The most epic site ever made</title>
+    <!-- Połączenie z osobnym plikiem CSS -->
     <link rel="stylesheet" href="style.css">
-    <!-- Oficjalna biblioteka Supabase z serwera CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <main class="container">
-        <!-- Szklana karta formularza (Glassmorphism) -->
-        <section id="auth-container" class="glass-card">
-            <div class="auth-box">
-                <h2>Witaj z powrotem</h2>
-                <p class="auth-subtitle">Zaloguj się lub utwórz nowe konto</p>
-                
-                <div class="input-group">
-                    <label for="auth-email">Adres e-mail</label>
-                    <input type="email" id="auth-email" placeholder="nazwa@domena.pl" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="auth-password">Hasło</label>
-                    <input type="password" id="auth-password" placeholder="••••••••" required>
-                </div>
-                
-                <!-- Fizyczne przyciski akcji -->
-                <div class="auth-buttons">
-                    <button type="button" id="btn-login" class="btn-primary">Zaloguj się</button>
-                    <button type="button" id="btn-register" class="btn-secondary">Zarejestruj</button>
-                </div>
-                
-                <!-- Komunikaty zwrotne dla użytkownika -->
-                <p id="auth-status"></p>
-            </div>
-        </section>
-    </main>
+    <!-- Animowane tło -->
+    <div class="background-glow"></div>
 
-    <!-- Połączenie z Twoim plikiem script.js -->
+    <!-- Przełącznik języków z ruchomym wskaźnikiem -->
+    <div class="lang-switcher">
+        <div class="nav-indicator" id="indicator"></div>
+        <button class="lang-btn active" onclick="changeLanguage('pl', this)">PL</button>
+        <button class="lang-btn" onclick="changeLanguage('en', this)">EN</button>
+        <button class="lang-btn" onclick="changeLanguage('de', this)">DE</button>
+    </div>
+
+    <!-- Główna zawartość strony -->
+    <div class="main-container">
+        <h1 id="main-title">Najbardziej epicka strona, jaka kiedykolwiek powstała</h1>
+        <p id="main-desc">Witamy w cyfrowym arcydziele. Ta strona została stworzona, aby zachwycać, inspirować i przekraczać granice zwykłego internetu. Poczuj czystą moc nowoczesnego designu.</p>
+        <button class="epic-btn" id="main-btn" onclick="epicAction()">Doświadcz Epickości</button>
+    </div>
+
+    <!-- Epicka Przeglądarka Zdjęć -->
+    <div class="gallery-container">
+        <div class="gallery-slider">
+            <img id="gallery-img" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Epic view 1">
+            <div class="gallery-caption" id="gallery-caption">Epicki Widok 1: Cyfrowe płótno przyszłości</div>
+        </div>
+        <button class="nav-btn prev-btn" onclick="prevImage()">&#10094;</button>
+        <button class="nav-btn next-btn" onclick="nextImage()">&#10095;</button>
+    </div>
+
+    <!-- Połączenie z osobnym plikiem JS -->
     <script src="script.js"></script>
 </body>
 </html>
