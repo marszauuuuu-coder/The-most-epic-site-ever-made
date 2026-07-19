@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The most epic site ever made</title>
-    <!-- Połączenie z osobnym plikiem CSS -->
+    <title>Epicka Strona z Rankingiem</title>
+    <!-- Łączenie z plikiem CSS -->
     <link rel="stylesheet" href="style.css">
-    <!-- DODANO: Oficjalna biblioteka Supabase niezbędna do działania script.js -->
+    
+    <!-- KLUCZOWE: Biblioteka Supabase wczytywana z CDN (bez tego JS zgłosi błąd) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <!-- Animowane tło -->
+    <!-- Animowane Epickie Tło -->
     <div class="background-glow"></div>
 
-    <!-- Przełącznik języków z ruchomym wskaźnikiem -->
+    <!-- Wybór Języka z płynnym wskaźnikiem (id="indicator") -->
     <div class="lang-switcher">
         <div class="nav-indicator" id="indicator"></div>
         <button class="lang-btn active" onclick="changeLanguage('pl', this)">PL</button>
@@ -22,59 +23,61 @@
         <button class="lang-btn" onclick="changeLanguage('de', this)">DE</button>
     </div>
 
-    <!-- Główna zawartość strony -->
+    <!-- Główna Zawartość Strony -->
     <div class="main-container">
         <h1 id="main-title">Najbardziej epicka strona, jaka kiedykolwiek powstała</h1>
         <p id="main-desc">Witamy w cyfrowym arcydziele. Ta strona została stworzona, aby zachwycać, inspirować i przekraczać granice zwykłego internetu. Poczuj czystą moc nowoczesnego designu.</p>
         <button class="epic-btn" id="main-btn" onclick="epicAction()">Doświadcz Epickości</button>
-
-        <!-- DODANO: Szklany formularz logowania i rejestracji Supabase -->
-        <section id="auth-container" class="glass-card" style="margin-top: 3rem;">
-            <div class="auth-box">
-                <h2 style="margin-bottom: 0.5rem;">Witaj z powrotem</h2>
-                <p class="auth-subtitle" style="margin-bottom: 1.5rem;">Zaloguj się lub utwórz nowe konto</p>
-                
-                <div class="input-group" style="margin-bottom: 1rem; text-align: left;">
-                    <label for="auth-email" style="display: block; margin-bottom: 0.5rem;">Nick</label>
-                    <input type="email" id="auth-username" placeholder="Wpisz nick" required>
-                </div>
-                
-                <div class="input-group" style="margin-bottom: 1.5rem; text-align: left;">
-                    <label for="auth-password" style="display: block; margin-bottom: 0.5rem;">Hasło</label>
-                    <input type="password" id="auth-password" placeholder="••••••••" required>
-                </div>
-                
-                <div class="auth-buttons" style="display: flex; gap: 1rem;">
-                    <button type="button" id="btn-login" class="btn-primary">Zaloguj się</button>
-                    <button type="button" id="btn-register" class="btn-secondary">Zarejestruj się</button>
-                </div>
-                
-                <p id="auth-status" style="margin-top: 1rem; min-height: 1.2rem; font-weight: 500;"></p>
-            </div>
-        </section>
     </div>
 
-    <!-- Epicka Przeglądarka Zdjęć -->
+    <!-- Przeglądarka Zdjęć (Karuzela) -->
     <div class="gallery-container">
         <div class="gallery-slider">
-            <img id="gallery-img" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Epic view 1">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" id="gallery-img" alt="Epic view">
             <div class="gallery-caption" id="gallery-caption">Epicki Widok 1: Cyfrowe płótno przyszłości</div>
+            
+            <button class="nav-btn prev-btn" onclick="prevImage()">❮</button>
+            <button class="nav-btn next-btn" onclick="nextImage()">❯</button>
         </div>
-        <button class="nav-btn prev-btn" onclick="prevImage()">&#10094;</button>
-        <button class="nav-btn next-btn" onclick="nextImage()">&#10095;</button>
     </div>
 
-    <!-- Połączenie z osobnym plikiem JS -->
+    <!-- System Autoryzacji oparty na NICKACH (Glassmorphism) -->
+    <div class="glass-card">
+        <div class="auth-box">
+            <h2>Panel Wojownika</h2>
+            <p class="auth-subtitle">Zaloguj się nickiem, aby zbierać punkty</p>
+            
+            <div class="input-group">
+                <label for="auth-username">Twój unikalny Nick</label>
+                <input type="text" id="auth-username" placeholder="Wpisz swój nick...">
+            </div>
+            
+            <div class="input-group">
+                <label for="auth-password">Hasło</label>
+                <input type="password" id="auth-password" placeholder="••••••••">
+            </div>
+            
+            <div class="auth-buttons">
+                <button class="btn-primary" id="btn-login">Zaloguj</button>
+                <button class="btn-secondary" id="btn-register">Rejestracja</button>
+            </div>
+            
+            <div id="auth-status"></div>
+        </div>
+    </div>
+
+    <!-- TABLICA WYNIKÓW (Leaderboard) -->
+    <div class="glass-card leaderboard-card">
+        <h2>🏆 Najbardziej Epicy Gracze</h2>
+        <p class="auth-subtitle">Klikaj główny przycisk i dominuj w rankingu!</p>
+        
+        <!-- To ID musi idealnie pasować do skryptu JS -->
+        <div class="leaderboard-list" id="leaderboard-list">
+            <p style="text-align:center; color:#636e72;">Ładowanie rankingu...</p>
+        </div>
+    </div>
+
+    <!-- Łączenie z plikiem JavaScript na samym końcu body -->
     <script src="script.js"></script>
-
-<div class="glass-card leaderboard-card">
-    <h2>🏆 Najbardziej Epicy Gracze</h2>
-    <p class="auth-subtitle">Zdobywaj punkty za zadania i dominuj w rankingu!</p>
-    
-    <div class="leaderboard-list" id="leaderboard-list">
-        <!-- Tutaj JS wstrzyknie wiersze rankingu -->
-        <p style="text-align:center; color:#636e72;">Ładowanie rankingu...</p>
-    </div>
-</div>
 </body>
 </html>
