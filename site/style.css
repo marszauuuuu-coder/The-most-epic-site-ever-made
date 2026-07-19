@@ -360,3 +360,59 @@ p {
     .lang-switcher { top: 10px; right: 10px; }
     .glass-card { padding: 1.5rem 1rem; }
 }
+
+.leaderboard-card {
+    max-width: 500px !important;
+    margin: 2rem auto !important;
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Wiersz rankingu */
+.leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+
+.leaderboard-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(0, 206, 201, 0.3);
+    transform: translateX(4px);
+}
+
+.leaderboard-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+/* Styl dla TOP 3 */
+.rank {
+    font-weight: 800;
+    width: 24px;
+    color: #b2bec3;
+}
+.leaderboard-item:nth-child(1) .rank { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); } /* Złoto */
+.leaderboard-item:nth-child(2) .rank { color: #c0c0c0; } /* Srebro */
+.leaderboard-item:nth-child(3) .rank { color: #cd7f32; } /* Brąz */
+
+.player-points {
+    color: #00ceca;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(0, 206, 201, 0.3);
+}
