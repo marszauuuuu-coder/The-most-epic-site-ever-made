@@ -1,233 +1,162 @@
-/* --- Reset i Style Globalne --- */
+/* Resetowanie domyślnych marginesów i ustawienie czcionki */
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/* Tło strony - ciemny gradient */
 body {
-    background: #0a0a12;
-    color: #fff;
-    overflow-x: hidden;
+    background: radial-gradient(circle at center, #1e1e2f 0%, #0f0f15 100%);
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    position: relative;
-    padding: 100px 20px;
-    gap: 60px;
+    color: #ffffff;
 }
 
-/* --- Animowane Epickie Tło --- */
-.background-glow {
-    position: absolute;
+/* Centralny kontener */
+.container {
     width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: 
-        radial-gradient(circle at 20% 30%, rgba(108, 92, 231, 0.2) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(0, 206, 201, 0.2) 0%, transparent 40%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* --- Wybór Języka (Prawy Górny Róg z płynnym wskaźnikiem) --- */
-.lang-switcher {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 6px;
-    border-radius: 12px;
+    padding: 20px;
     display: flex;
-    position: fixed;
+    justify-content: center;
 }
 
-/* Ruchoma niebieska ramka/tło */
-.nav-indicator {
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    height: calc(100% - 12px);
-    width: 42px; /* Wartość startowa dla PL, JS wyliczy resztę */
-    background: rgba(0, 206, 201, 0.15);
-    border: 1px solid rgba(0, 206, 201, 0.6);
-    box-shadow: 0 0 12px rgba(0, 206, 201, 0.3);
-    border-radius: 8px;
-    z-index: 1;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
+/* Karta Glassmorphism (efekt szkła) */
+.glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem 2rem;
 }
 
-.lang-btn {
-    position: relative;
-    z-index: 2; /* Przyciski muszą być nad wskaźnikiem, żeby dało się je kliknąć */
-    background: none;
-    border: none;
-    color: #888;
-    font-size: 14px;
+.auth-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.auth-box h2 {
+    font-size: 1.75rem;
     font-weight: 700;
-    cursor: pointer;
-    padding: 8px 14px;
-    border-radius: 8px;
-    transition: color 0.3s ease;
-}
-
-.lang-btn:hover {
-    color: #fff;
-}
-
-.lang-btn.active {
-    color: #00ceca;
-    text-shadow: 0 0 8px rgba(0, 206, 201, 0.4);
-}
-
-/* --- Główna Zawartość --- */
-.main-container {
-    position: relative;
-    z-index: 2;
     text-align: center;
-    max-width: 800px;
-    margin-top: 40px;
-}
-
-h1, p, .epic-btn, #gallery-img, #gallery-caption {
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.fade-out {
-    opacity: 0;
-    transform: translateY(8px);
-}
-
-h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background: linear-gradient(45deg, #6c5ce7, #00ceca, #a29bfe);
-    background-size: 200% auto;
+    background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: gradientMove 5s ease infinite;
-    margin-bottom: 20px;
 }
 
-p {
-    font-size: 1.2rem;
-    color: #b2bec3;
-    line-height: 1.6;
-    margin-bottom: 40px;
-}
-
-/* --- Epicki Przycisk --- */
-.epic-btn {
-    background: linear-gradient(45deg, #6c5ce7, #00ceca);
-    color: #fff;
-    border: none;
-    padding: 15px 40px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
-}
-
-.epic-btn:not(.fade-out):hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 6px 25px rgba(0, 206, 201, 0.6);
-    transition: all 0.3s ease;
-}
-
-/* --- Przeglądarka Zdjęć --- */
-.gallery-container {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 700px;
-    height: 400px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-}
-
-.gallery-slider {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.gallery-slider img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-#gallery-img.fade-out {
-    transform: scale(0.98);
-}
-
-.gallery-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-    padding: 30px 20px 20px 20px;
-    font-size: 1.1rem;
-    font-weight: 500;
+.auth-subtitle {
+    font-size: 0.9rem;
+    color: #94a3b8;
     text-align: center;
-    color: #e0e0e0;
+    margin-top: -0.75rem;
+    margin-bottom: 0.5rem;
 }
 
-.nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 14px 18px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    border-radius: 50%;
+/* Pola tekstowe i etykiety */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-size: 1rem;
+    outline: none;
     transition: all 0.3s ease;
-    user-select: none;
 }
 
-.nav-btn:hover {
-    background: #00ceca;
-    color: #0a0a12;
-    box-shadow: 0 0 15px #00ceca;
-    border-color: transparent;
+/* Efekt podświetlenia pola po kliknięciu */
+.input-group input:focus {
+    border-color: #00d2ff;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 14px rgba(0, 210, 255, 0.25);
 }
 
-.prev-btn { left: 20px; }
-.next-btn { right: 20px; }
-
-/* --- Animacje --- */
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* Układ fizycznych przycisków */
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.75rem;
 }
 
-/* --- Responsywność --- */
-@media (max-width: 600px) {
-    body { padding-top: 80px; gap: 40px; }
-    h1 { font-size: 2.2rem; }
-    p { font-size: 1rem; }
-    .gallery-container { height: 280px; }
-    .nav-btn { padding: 10px 14px; font-size: 1rem; }
-    .lang-switcher { top: 10px; right: 10px; }
+.auth-buttons button {
+    flex: 1;
+    padding: 0.9rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Przycisk Główny - Logowanie (Jasnoniebieski Neon) */
+.btn-primary {
+    background: linear-gradient(135deg, #0052d4, #00d2ff);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(0, 210, 255, 0.5);
+    filter: brightness(1.1);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Przycisk Dodatkowy - Rejestracja (Stonowany, wtopiony w tło) */
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    color: #f1f5f9;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+    transform: translateY(0);
+}
+
+/* Komunikaty statusu */
+#auth-status {
+    font-size: 0.85rem;
+    text-align: center;
+    min-height: 1.2rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+.status-error {
+    color: #f87171; /* Czerwony */
+}
+
+.status-success {
+    color: #34d399; /* Zielony */
 }
