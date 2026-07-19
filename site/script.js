@@ -1,7 +1,7 @@
 // --- KONFIGURACJA SUPABASE ---
 // Podmień te wartości na swoje klucze z panelu Supabase!
-const SUPABASE_URL = 'https://TWOJ_PROJEKT.supabase.co';
-const SUPABASE_ANON_KEY = 'TWOJ_KLUCZ_ANON';
+const SUPABASE_URL = 'https://nodhzftlthehqyogoqru.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vZGh6ZnRsdGhlaHF5b2dvcXJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzkyMjksImV4cCI6MjEwMDA1NTIyOX0.EdL4pC86Hn0jLkRxPEqtyP8vAYxntwqaOYaOyhWoh7c';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Zmienne globalne
