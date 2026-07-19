@@ -6,7 +6,7 @@ const images = [
 ];
 
 let currentImgIndex = 0;
-let currentLang = 'pl';
+let currentLang = 'en'; // Domyślny język awaryjny (angielski)
 
 // Baza tłumaczeń dla 3 języków
 const translations = {
@@ -47,17 +47,19 @@ const translations = {
 
 // Funkcja zmieniająca język na stronie z płynną animacją i PRZEPŁYWAJĄCĄ obwódką
 function changeLanguage(lang, element) {
-    if (currentLang === lang && element) return; 
+    // Jeżeli element menu nie został przekazany (np. przy autodetekcji na starcie), szukamy go w DOM
+    if (!element) {
+        element = Array.from(document.querySelectorAll('.lang-btn')).find(b => b.innerText.toLowerCase() === lang);
+    }
+
     currentLang = lang;
 
     // --- Magia Przepływającej Obwódki ---
     if (element) {
         const indicator = document.getElementById('indicator');
-        // Pobieramy pozycję przycisku względem kontenera nadrzędnego (odejmujemy 6px paddingu menu)
         const targetX = element.offsetLeft - 6; 
         const targetWidth = element.offsetWidth;
 
-        // Przesuwamy i zmieniamy szerokość obwódki
         indicator.style.transform = `translateX(${targetX}px)`;
         indicator.style.width = `${targetWidth}px`;
     }
@@ -93,14 +95,20 @@ function changeLanguage(lang, element) {
     }
 }
 
-// Inicjalizacja pozycji obwódki po załadowaniu strony na elemencie PL
+// Inicjalizacja: Wykrywanie języka kraju użytkownika po załadowaniu strony
 window.onload = function() {
-    const defaultBtn = document.querySelector('.lang-btn.active');
-    if (defaultBtn) {
-        const indicator = document.getElementById('indicator');
-        indicator.style.transform = `translateX(${defaultBtn.offsetLeft - 6}px)`;
-        indicator.style.width = `${defaultBtn.offsetWidth}px`;
+    // navigator.language zwraca np. "pl", "pl-PL", "de", "de-DE", "en-US"
+    const userLanguage = (navigator.language || navigator.userLanguage).toLowerCase();
+    let detectedLang = 'en'; // Domyślnie angielski dla reszty świata
+
+    if (userLanguage.startsWith('pl')) {
+        detectedLang = 'pl';
+    } else if (userLanguage.startsWith('de')) {
+        detectedLang = 'de';
     }
+
+    // Wywołanie zmiany języka i ustawienie obwódki na właściwym przycisku
+    changeLanguage(detectedLang);
 };
 
 // Logika galerii zdjęć
