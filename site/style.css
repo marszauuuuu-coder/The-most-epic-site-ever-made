@@ -34,7 +34,7 @@ body {
     pointer-events: none;
 }
 
-/* --- Wybór Języka (Prawy Górny Róg z płynnym wskaźnikiem) --- */
+/* --- Wybór Języka (Prawy Górny Róg) --- */
 .lang-switcher {
     position: fixed;
     top: 20px;
@@ -42,20 +42,20 @@ body {
     z-index: 10;
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 6px;
     border-radius: 12px;
     display: flex;
-    position: fixed;
 }
 
-/* Ruchoma niebieska ramka/tło */
+/* Ruchoma ramka wyboru języka */
 .nav-indicator {
     position: absolute;
     top: 6px;
     left: 6px;
     height: calc(100% - 12px);
-    width: 42px; /* Wartość startowa dla PL, JS wyliczy resztę */
+    width: 42px;
     background: rgba(0, 206, 201, 0.15);
     border: 1px solid rgba(0, 206, 201, 0.6);
     box-shadow: 0 0 12px rgba(0, 206, 201, 0.3);
@@ -67,7 +67,7 @@ body {
 
 .lang-btn {
     position: relative;
-    z-index: 2; /* Przyciski muszą być nad wskaźnikiem, żeby dało się je kliknąć */
+    z-index: 2;
     background: none;
     border: none;
     color: #888;
@@ -97,7 +97,7 @@ body {
     margin-top: 40px;
 }
 
-h1, p, .epic-btn, #gallery-img, #gallery-caption {
+h1, p, .epic-btn, #gallery-img, #gallery-caption, .glass-card {
     transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
@@ -146,6 +146,133 @@ p {
     transition: all 0.3s ease;
 }
 
+/* --- Formularz Supabase (Glassmorphism) --- */
+.glass-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem 2rem;
+    margin: 3rem auto 0 auto;
+}
+
+.auth-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.auth-box h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, #ffffff 0%, #b2bec3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-subtitle {
+    font-size: 0.9rem;
+    color: #636e72;
+    text-align: center;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    color: #b2bec3;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #00ceca;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 14px rgba(0, 206, 201, 0.25);
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.auth-buttons button {
+    flex: 1;
+    padding: 0.9rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dostosowanie przycisków do motywu strony (Cyan / Purple) */
+.btn-primary {
+    background: linear-gradient(45deg, #6c5ce7, #00ceca);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 206, 201, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(0, 206, 201, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #f1f5f9;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+    transform: translateY(0);
+}
+
+#auth-status {
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.status-error {
+    color: #ff7675;
+}
+
+.status-success {
+    color: #00ceca;
+}
+
 /* --- Przeglądarka Zdjęć --- */
 .gallery-container {
     position: relative;
@@ -156,6 +283,7 @@ p {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
@@ -211,138 +339,6 @@ p {
     box-shadow: 0 0 15px #00ceca;
     border-color: transparent;
 }
-/* --- DOPISZ TO NA KOŃCU SWOJEGO PLIKU STYLE.CSS --- */
-
-.glass-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    max-width: 420px;
-    padding: 2.5rem 2rem;
-    margin: 2rem auto; /* Wyśrodkuje kartę na stronie */
-}
-
-.auth-box {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
-.auth-box h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    text-align: center;
-    background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.auth-subtitle {
-    font-size: 0.9rem;
-    color: #94a3b8;
-    text-align: center;
-    margin-top: -0.75rem;
-    margin-bottom: 0.5rem;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.input-group label {
-    font-size: 0.85rem;
-    color: #94a3b8;
-    font-weight: 500;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    color: #ffffff;
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-.input-group input:focus {
-    border-color: #00d2ff;
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 14px rgba(0, 210, 255, 0.25);
-}
-
-.auth-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.75rem;
-}
-
-.auth-buttons button {
-    flex: 1;
-    padding: 0.9rem 1.2rem;
-    border: none;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #0052d4, #00d2ff);
-    color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(0, 210, 255, 0.5);
-    filter: brightness(1.1);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
-}
-
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.06);
-    color: #f1f5f9;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25) !important;
-    transform: translateY(-2px);
-}
-
-.btn-secondary:active {
-    transform: translateY(0);
-}
-
-#auth-status {
-    font-size: 0.85rem;
-    text-align: center;
-    min-height: 1.2rem;
-    margin-top: 0.5rem;
-    font-weight: 500;
-}
-
-.status-error {
-    color: #f87171;
-}
-
-.status-success {
-    color: #34d399;
-}
 
 .prev-btn { left: 20px; }
 .next-btn { right: 20px; }
@@ -362,4 +358,5 @@ p {
     .gallery-container { height: 280px; }
     .nav-btn { padding: 10px 14px; font-size: 1rem; }
     .lang-switcher { top: 10px; right: 10px; }
+    .glass-card { padding: 1.5rem 1rem; }
 }
