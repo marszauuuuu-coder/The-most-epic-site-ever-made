@@ -1,74 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Most Epic Site Ever Made</title>
+    <title>Panel Logowania & Rejestracji</title>
+    <!-- Połączenie z arkuszem stylów CSS -->
     <link rel="stylesheet" href="style.css">
-    <!-- Supabase Library CDN -->
+    <!-- Oficjalna biblioteka Supabase z serwera CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <!-- Radial Glowing Backgrounds -->
-    <div class="glow-bg glow-1"></div>
-    <div class="glow-bg glow-2"></div>
-
-    <header>
-        <div class="logo">EPIC.IO</div>
-        
-        <!-- Sliding Pill Language Switcher -->
-        <nav class="lang-switcher">
-            <div id="indicator" class="nav-indicator"></div>
-            <button class="lang-btn active" onclick="changeLanguage('en', this)">English</button>
-            <button class="lang-btn" onclick="changeLanguage('pl', this)">Polski</button>
-            <button class="lang-btn" onclick="changeLanguage('de', this)">Deutsch</button>
-        </nav>
-    </header>
-
     <main class="container">
-        <!-- Main Presentation Section -->
-        <section class="hero-section glass-card">
-            <h1 id="main-title" class="fade-transition">The most epic site ever made</h1>
-            <p id="main-desc" class="fade-transition">Welcome to a digital masterpiece. This website was built to amaze, inspire, and push the boundaries of the ordinary web. Feel the pure power of modern design.</p>
-            <button id="main-btn" class="epic-cta fade-transition" onclick="epicAction()">Experience Epicness</button>
-        </section>
-
-        <!-- Dynamic Authentication Box (Supabase) -->
-        <section id="auth-container" class="glass-card auth-box">
-            <h3 id="auth-title">Account Access</h3>
-            <div class="input-group">
-                <input type="text" id="auth-nick" placeholder="Username / Nick">
-            </div>
-            <div class="input-group">
-                <input type="password" id="auth-pass" placeholder="Password (min. 6 chars)">
-            </div>
-            <div class="auth-buttons">
-                <button class="btn-secondary" onclick="handleRegister()">Register</button>
-                <button class="btn-primary" onclick="handleLogin()">Log In</button>
-            </div>
-            <p id="auth-status"></p>
-        </section>
-
-        <!-- Immersive Media Browser -->
-        <section class="gallery-section glass-card">
-            <div class="carousel-wrapper">
-                <button class="carousel-nav prev" onclick="prevImage()">&#10094;</button>
-                <div class="image-container">
-                    <img id="gallery-img" class="fade-transition" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Epic visual">
+        <!-- Szklana karta formularza (Glassmorphism) -->
+        <section id="auth-container" class="glass-card">
+            <div class="auth-box">
+                <h2>Witaj z powrotem</h2>
+                <p class="auth-subtitle">Zaloguj się lub utwórz nowe konto</p>
+                
+                <div class="input-group">
+                    <label for="auth-email">Adres e-mail</label>
+                    <input type="email" id="auth-email" placeholder="nazwa@domena.pl" required>
                 </div>
-                <button class="carousel-nav next" onclick="nextImage()">&#10095;</button>
-            </div>
-            <div class="caption-container">
-                <p id="gallery-caption" class="fade-transition">Epic View 1: The digital canvas of the future</p>
+                
+                <div class="input-group">
+                    <label for="auth-password">Hasło</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" required>
+                </div>
+                
+                <!-- Fizyczne przyciski akcji -->
+                <div class="auth-buttons">
+                    <button type="button" id="btn-login" class="btn-primary">Zaloguj się</button>
+                    <button type="button" id="btn-register" class="btn-secondary">Zarejestruj</button>
+                </div>
+                
+                <!-- Komunikaty zwrotne dla użytkownika -->
+                <p id="auth-status"></p>
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 The Most Epic Site Ever Made. Open Source Project.</p>
-    </footer>
-
+    <!-- Połączenie z Twoim plikiem script.js -->
     <script src="script.js"></script>
 </body>
 </html>
