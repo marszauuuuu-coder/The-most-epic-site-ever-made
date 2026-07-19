@@ -1,8 +1,3 @@
-// Inicjalizacja Supabase z Twoimi kluczami publicznymi (Open Source Safe)
-const SUPABASE_URL = 'https://nodhzftlthehqyogoqru.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vZGh6ZnRsdGhlaHF5b2dvcXJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzkyMjksImV4cCI6MjEwMDA1NTIyOX0.EdL4pC86Hn0jLkRxPEqtyP8vAYxntwqaOYaOyhWoh7c';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
 // Tablica ze zdjęciami karuzeli
 const images = [
     "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
@@ -11,28 +6,15 @@ const images = [
 ];
 
 let currentImgIndex = 0;
-let currentLang = 'en'; // Domyślny język awaryjny
+let currentLang = 'en'; // Domyślny język awaryjny (angielski)
 
-// Pełna zintegrowana baza tłumaczeń (Interfejs + System Kont)
+// Baza tłumaczeń dla 3 języków
 const translations = {
     pl: {
         title: "Najbardziej epicka strona, jaka kiedykolwiek powstała",
         desc: "Witamy w cyfrowym arcydziele. Ta strona została stworzona, aby zachwycać, inspirować i przekraczać granice zwykłego internetu. Poczuj czystą moc nowoczesnego designu.",
         btn: "Doświadcz Epickości",
         alert: "Właśnie doświadczyłeś maksymalnego poziomu epickości!",
-        authTitle: "Dostęp do Konta",
-        authTitleProfile: "Twój Profil",
-        placeholderNick: "Nazwa użytkownika / Nick",
-        placeholderPass: "Hasło (min. 6 znaków)",
-        btnRegister: "Zarejestruj się",
-        btnLogin: "Zaloguj się",
-        btnLogout: "Wyloguj się",
-        loading: "Przetwarzanie danych...",
-        regSuccess: "Konto utworzone pomyślnie! Możesz się teraz zalogować.",
-        loginSuccess: "Zalogowano pomyślnie!",
-        logoutSuccess: "Wylogowano z systemu.",
-        emptyFields: "Błąd: Wszystkie pola muszą być wypełnione!",
-        errorPrefix: "Błąd: ",
         captions: [
             "Epicki Widok 1: Cyfrowe płótno przyszłości",
             "Epicki Widok 2: Architektura jutra",
@@ -44,19 +26,6 @@ const translations = {
         desc: "Welcome to a digital masterpiece. This website was built to amaze, inspire, and push the boundaries of the ordinary web. Feel the pure power of modern design.",
         btn: "Experience Epicness",
         alert: "You have just experienced the maximum level of epicness!",
-        authTitle: "Account Access",
-        authTitleProfile: "Your Profile",
-        placeholderNick: "Username / Nick",
-        placeholderPass: "Password (min. 6 chars)",
-        btnRegister: "Register",
-        btnLogin: "Log In",
-        btnLogout: "Log Out",
-        loading: "Processing...",
-        regSuccess: "Account created! You can now log in.",
-        loginSuccess: "Logged in successfully!",
-        logoutSuccess: "Logged out.",
-        emptyFields: "Error: Please fill all fields!",
-        errorPrefix: "Error: ",
         captions: [
             "Epic View 1: The digital canvas of the future",
             "Epic View 2: The architecture of tomorrow",
@@ -68,19 +37,6 @@ const translations = {
         desc: "Willkommen zu einem digitalen Meisterwerk. Diese Website wurde geschaffen, um zu staunen, zu inspirieren und die Grenzen des gewöhnlichen Internets zu sprengen. Spüren Sie die pure Kraft modernen Designs.",
         btn: "Epizität Erleben",
         alert: "Sie haben gerade das maximale Maß an Epizität erlebt!",
-        authTitle: "Kontozugriff",
-        authTitleProfile: "Dein Profil",
-        placeholderNick: "Benutzername / Nick",
-        placeholderPass: "Passwort (mind. 6 Zeichen)",
-        btnRegister: "Registrieren",
-        btnLogin: "Einloggen",
-        btnLogout: "Ausgeloggt",
-        loading: "In Bearbeitung...",
-        regSuccess: "Konto erstellt! Sie können sich jetzt einloggen.",
-        loginSuccess: "Erfolgreich eingeloggt!",
-        logoutSuccess: "Ausgeloggt.",
-        emptyFields: "Fehler: Bitte alle Felder ausfüllen!",
-        errorPrefix: "Fehler: ",
         captions: [
             "Epische Ansicht 1: Die digitale Leinwand der Zukunft",
             "Epische Ansicht 2: Die Architektur von morgen",
@@ -89,63 +45,61 @@ const translations = {
     }
 };
 
-// Funkcja zarządzająca dynamiczną zmianą języków oraz animacją przepływającego menu
+// Funkcja zmieniająca język na stronie z płynną animacją i PRZEPŁYWAJĄCĄ obwódką
 function changeLanguage(lang, element) {
+    // Jeżeli element menu nie został przekazany (np. przy autodetekcji na starcie), szukamy go w DOM
     if (!element) {
-        // Szukanie przycisku na podstawie tekstu, jeśli wywołane automatycznie
-        element = Array.from(document.querySelectorAll('.lang-btn')).find(b => {
-            const txt = b.innerText.toLowerCase();
-            if (lang === 'pl') return txt === 'polski';
-            if (lang === 'de') return txt === 'deutsch';
-            return txt === 'english';
-        });
+        element = Array.from(document.querySelectorAll('.lang-btn')).find(b => b.innerText.toLowerCase() === lang);
     }
 
     currentLang = lang;
 
-    // --- Animacja Przepływającego Wskaźnika ---
+    // --- Magia Przepływającej Obwódki ---
     if (element) {
         const indicator = document.getElementById('indicator');
         const targetX = element.offsetLeft - 6; 
         const targetWidth = element.offsetWidth;
+
         indicator.style.transform = `translateX(${targetX}px)`;
         indicator.style.width = `${targetWidth}px`;
     }
 
-    // --- Dynamiczne przełączanie klas do płynnego wygaszania (Fade-Out/In) ---
-    const transElements = [
-        { el: document.getElementById('main-title'), text: translations[lang].title },
-        { el: document.getElementById('main-desc'), text: translations[lang].desc },
-        { el: document.getElementById('main-btn'), text: translations[lang].btn },
-        { el: document.getElementById('gallery-caption'), text: translations[lang].captions[currentImgIndex] }
-    ];
+    // --- Animacja Fade-Out dla Tekstów ---
+    const title = document.getElementById('main-title');
+    const desc = document.getElementById('main-desc');
+    const btn = document.getElementById('main-btn');
+    const caption = document.getElementById('gallery-caption');
 
-    transElements.forEach(item => {
-        if (item.el) item.el.classList.add('fade-out');
-    });
+    title.classList.add('fade-out');
+    desc.classList.add('fade-out');
+    btn.classList.add('fade-out');
+    caption.classList.add('fade-out');
 
     setTimeout(() => {
-        transElements.forEach(item => {
-            if (item.el) {
-                item.el.innerText = item.text;
-                item.el.classList.remove('fade-out');
-            }
-        });
+        title.innerText = translations[lang].title;
+        desc.innerText = translations[lang].desc;
+        btn.innerText = translations[lang].btn;
+        caption.innerText = translations[lang].captions[currentImgIndex];
+
+        title.classList.remove('fade-out');
+        desc.classList.remove('fade-out');
+        btn.classList.remove('fade-out');
+        caption.classList.remove('fade-out');
     }, 250);
 
-    // Odświeżenie klas przycisków w menu językowym
+    // Aktualizacja klas tekstowych aktywności dla przycisków
     const buttons = document.querySelectorAll('.lang-btn');
     buttons.forEach(b => b.classList.remove('active'));
-    if (element) element.classList.add('active');
-
-    // Aktualizacja tekstów w oknie logowania, pod warunkiem że użytkownik nie jest zalogowany
-    updateAuthTexts();
+    if (element) {
+        element.classList.add('active');
+    }
 }
 
-// Inicjalizacja: Wykrywanie języka na podstawie ustawień lokalnych kraju użytkownika
+// Inicjalizacja: Wykrywanie języka kraju użytkownika po załadowaniu strony
 window.onload = function() {
+    // navigator.language zwraca np. "pl", "pl-PL", "de", "de-DE", "en-US"
     const userLanguage = (navigator.language || navigator.userLanguage).toLowerCase();
-    let detectedLang = 'en'; // Domyślny angielski dla całego świata
+    let detectedLang = 'en'; // Domyślnie angielski dla reszty świata
 
     if (userLanguage.startsWith('pl')) {
         detectedLang = 'pl';
@@ -153,120 +107,11 @@ window.onload = function() {
         detectedLang = 'de';
     }
 
-    // Uruchomienie języka i dopasowanie wskaźnika
+    // Wywołanie zmiany języka i ustawienie obwódki na właściwym przycisku
     changeLanguage(detectedLang);
-    
-    // Sprawdzenie aktywnej sesji użytkownika w bazie danych Supabase
-    checkUserSession();
 };
 
-// --- LOGIKA OBSŁUGI BAZY DANYCH (SUPABASE AUTH) ---
-
-function updateAuthTexts() {
-    const titleEl = document.getElementById('auth-title');
-    const nickEl = document.getElementById('auth-nick');
-    const passEl = document.getElementById('auth-pass');
-    const btns = document.querySelectorAll('.auth-buttons button');
-
-    // Aktualizujemy tylko, jeśli elementy formularza fizycznie istnieją (czyli użytkownik jest wylogowany)
-    if (nickEl && passEl && titleEl) {
-        titleEl.innerText = translations[currentLang].authTitle;
-        nickEl.placeholder = translations[currentLang].placeholderNick;
-        passEl.placeholder = translations[currentLang].placeholderPass;
-        if(btns[0]) btns[0].innerText = translations[currentLang].btnRegister;
-        if(btns[1]) btns[1].innerText = translations[currentLang].btnLogin;
-    }
-}
-
-async function handleRegister() {
-    const nick = document.getElementById('auth-nick').value.trim();
-    const pass = document.getElementById('auth-pass').value;
-    const statusEl = document.getElementById('auth-status');
-
-    if (!nick || !pass) {
-        statusEl.innerText = translations[currentLang].emptyFields;
-        return;
-    }
-
-    statusEl.innerText = translations[currentLang].loading;
-    const fakeEmail = `${nick}@epic-user.local`;
-
-    const { data, error } = await supabase.auth.signUp({
-        email: fakeEmail,
-        password: pass
-    });
-
-    if (error) {
-        statusEl.innerText = translations[currentLang].errorPrefix + error.message;
-    } else {
-        statusEl.innerText = translations[currentLang].regSuccess;
-    }
-}
-
-async function handleLogin() {
-    const nick = document.getElementById('auth-nick').value.trim();
-    const pass = document.getElementById('auth-pass').value;
-    const statusEl = document.getElementById('auth-status');
-
-    if (!nick || !pass) {
-        statusEl.innerText = translations[currentLang].emptyFields;
-        return;
-    }
-
-    statusEl.innerText = translations[currentLang].loading;
-    const fakeEmail = `${nick}@epic-user.local`;
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: fakeEmail,
-        password: pass
-    });
-
-    if (error) {
-        statusEl.innerText = translations[currentLang].errorPrefix + error.message;
-    } else {
-        statusEl.innerText = translations[currentLang].loginSuccess;
-        checkUserSession(); 
-    }
-}
-
-async function handleLogout() {
-    await supabase.auth.signOut();
-    // Przywracamy podstawowy szablon formularza logowania
-    const container = document.getElementById('auth-container');
-    container.innerHTML = `
-        <h3 id="auth-title"></h3>
-        <div class="input-group"><input type="text" id="auth-nick"></div>
-        <div class="input-group"><input type="password" id="auth-pass"></div>
-        <div class="auth-buttons">
-            <button class="btn-secondary" onclick="handleRegister()"></button>
-            <button class="btn-primary" onclick="handleLogin()"></button>
-        </div>
-        <p id="auth-status"></p>
-    `;
-    changeLanguage(currentLang); // Przeładowanie języka odświeży wstrzyknięty HTML
-    document.getElementById('auth-status').innerText = translations[currentLang].logoutSuccess;
-}
-
-async function checkUserSession() {
-    const { data: { session } } = await supabase.auth.getSession();
-    const container = document.getElementById('auth-container');
-    
-    if (session && session.user && session.user.email) {
-        const userNick = session.user.email.split('@')[0];
-        
-        container.innerHTML = `
-            <h3 id="auth-title">${translations[currentLang].authTitleProfile}</h3>
-            <div class="profile-info" style="margin: 20px 0; font-size: 1.2rem; font-weight: bold; color: #00d2ff; text-shadow: 0 0 10px rgba(0,210,255,0.3);">
-                ⚡ ${userNick}
-            </div>
-            <button class="btn-primary" style="width: 100%;" onclick="handleLogout()">${translations[currentLang].btnLogout}</button>
-            <p id="auth-status"></p>
-        `;
-    }
-}
-
-// --- LOGIKA GALERII ZDJĘĆ ---
-
+// Logika galerii zdjęć
 function updateGallery() {
     const imgElement = document.getElementById('gallery-img');
     const captionElement = document.getElementById('gallery-caption');
@@ -293,6 +138,78 @@ function prevImage() {
     updateGallery();
 }
 
+// Akcja po kliknięciu głównego przycisku
 function epicAction() {
     alert(translations[currentLang].alert);
 }
+// --- KONFIGURACJA SUPABASE ---
+// Zmień poniższe adresy na własne z panelu Supabase (Settings -> API)
+const SUPABASE_URL = "https://TWÓJ-PROJEKT.supabase.co";
+const SUPABASE_ANON_KEY = "TWÓJ_KLUCZ_ANON_KEY";
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const emailInput = document.getElementById('auth-email');
+const passwordInput = document.getElementById('auth-password');
+const loginBtn = document.getElementById('btn-login');
+const registerBtn = document.getElementById('btn-register');
+const statusText = document.getElementById('auth-status');
+
+function updateStatus(message, isSuccess = false) {
+    statusText.innerText = message;
+    statusText.className = isSuccess ? 'status-success' : 'status-error';
+}
+
+// LOGOWANIE
+loginBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+        updateStatus("Proszę uzupełnić e-mail oraz hasło.");
+        return;
+    }
+
+    updateStatus("Trwa logowanie...", true);
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+    });
+
+    if (error) {
+        updateStatus(`Błąd logowania: ${error.message}`, false);
+    } else {
+        updateStatus("Zalogowano pomyślnie!", true);
+        console.log("Użytkownik:", data.user);
+    }
+});
+
+// REJESTRACJA
+registerBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+        updateStatus("Wypełnij oba pola, aby założyć konto.");
+        return;
+    }
+
+    if (password.length < 6) {
+        updateStatus("Hasło musi składać się z co najmniej 6 znaków.");
+        return;
+    }
+
+    updateStatus("Tworzenie konta...", true);
+
+    const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+    });
+
+    if (error) {
+        updateStatus(`Błąd rejestracji: ${error.message}`, false);
+    } else {
+        updateStatus("Konto utworzone! Sprawdź e-mail, aby je aktywować.", true);
+    }
+});
