@@ -342,5 +342,5 @@ window.onload = function() {
     changeLanguage(detectedLang);
     
     // Załadowanie aktualnego stanu rankingu z Supabase
-    fetchleaderboard();
+    fetchLeaderboard();
 };
