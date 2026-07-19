@@ -147,13 +147,16 @@ function epicAction() {
 
 // --- KONFIGURACJA SUPABASE ---
 // Zmień poniższe adresy na własne z panelu Supabase (Settings -> API)
-const SUPABASE_URL = "https://nodhzftlthehqyogoqru.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vZGh6ZnRsdGhlaHF5b2dvcXJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzkyMjksImV4cCI6MjEwMDA1NTIyOX0.EdL4pC86Hn0jLkRxPEqtyP8vAYxntwqaOYaOyhWoh7c";
+const SUPABASE_URL = "https://TWÓJ-PROJEKT.supabase.co";
+const SUPABASE_ANON_KEY = "TWÓJ_KLUCZ_ANON_KEY";
 
-// Poprawiona inicjalizacja klienta window.supabase (zapobiega konfliktom nazw)
+// Fikcyjna domena służąca do maskowania nicków jako e-mail dla Supabase
+const NICK_DOMAIN = "@twojadomena.internal";
+
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-const emailInput = document.getElementById('auth-email');
+// Zmieniono pobieranie elementu na auth-username (zamiast auth-email)
+const usernameInput = document.getElementById('auth-username'); 
 const passwordInput = document.getElementById('auth-password');
 const loginBtn = document.getElementById('btn-login');
 const registerBtn = document.getElementById('btn-register');
@@ -166,49 +169,51 @@ function updateStatus(message, isSuccess = false) {
     }
 }
 
-// Sprawdzenie, czy skrypt Supabase został załadowany w HTML
 if (!supabaseClient) {
-    console.error("Nie znaleziono biblioteki Supabase. Upewnij się, że dodałeś tag <script> Supabase w sekcji <head>.");
+    console.error("Nie znaleziono biblioteki Supabase.");
 }
 
-// LOGOWANIE
+// LOGOWANIE NICKIEM
 if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
         if (!supabaseClient) return;
         
-        const email = emailInput.value.trim();
+        const username = usernameInput.value.trim();
         const password = passwordInput.value;
 
-        if (!email || !password) {
-            updateStatus("Proszę uzupełnić e-mail oraz hasło.");
+        if (!username || !password) {
+            updateStatus("Proszę uzupełnić nick oraz hasło.");
             return;
         }
 
         updateStatus("Trwa logowanie...", true);
 
+        // Mapujemy nick na wewnętrzny format e-mail
+        const fakeEmail = `${username}${NICK_DOMAIN}`;
+
         const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
+            email: fakeEmail,
             password: password,
         });
 
         if (error) {
-            updateStatus(`Błąd logowania: ${error.message}`, false);
+            updateStatus(`Błąd logowania: Błędny nick lub hasło.`, false);
         } else {
-            updateStatus("Zalogowano pomyślnie!", true);
-            console.log("Użytkownik:", data.user);
+            updateStatus(`Witaj ponownie, ${username}!`, true);
+            console.log("Zalogowany użytkownik:", data.user);
         }
     });
 }
 
-// REJESTRACJA
+// REJESTRACJA NICKIEM
 if (registerBtn) {
     registerBtn.addEventListener('click', async () => {
         if (!supabaseClient) return;
 
-        const email = emailInput.value.trim();
+        const username = usernameInput.value.trim();
         const password = passwordInput.value;
 
-        if (!email || !password) {
+        if (!username || !password) {
             updateStatus("Wypełnij oba pola, aby założyć konto.");
             return;
         }
@@ -220,15 +225,24 @@ if (registerBtn) {
 
         updateStatus("Tworzenie konta...", true);
 
+        // Mapujemy nick na wewnętrzny format e-mail
+        const fakeEmail = `${username}${NICK_DOMAIN}`;
+
         const { data, error } = await supabaseClient.auth.signUp({
-            email: email,
+            email: fakeEmail,
             password: password,
+            // Opcjonalnie zapisujemy czysty nick w bazie danych jako meta-dane
+            options: {
+                data: {
+                    display_name: username
+                }
+            }
         });
 
         if (error) {
             updateStatus(`Błąd rejestracji: ${error.message}`, false);
         } else {
-            updateStatus("Konto utworzone! Sprawdź e-mail, aby je aktywować.", true);
+            updateStatus("Konto utworzone pomyślnie! Możesz się zalogować.", true);
         }
     });
 }
