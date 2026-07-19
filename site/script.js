@@ -49,7 +49,7 @@ const translations = {
 function changeLanguage(lang, element) {
     // Jeżeli element menu nie został przekazany (np. przy autodetekcji na starcie), szukamy go w DOM
     if (!element) {
-        element = Array.from(document.querySelectorAll('.lang-btn')).find(b => b.innerText.toLowerCase() === lang);
+        element = Array.from(document.querySelectorAll('.lang-btn')).find(b => b.getAttribute('onclick').includes(`'${lang}'`));
     }
 
     currentLang = lang;
@@ -57,11 +57,12 @@ function changeLanguage(lang, element) {
     // --- Magia Przepływającej Obwódki ---
     if (element) {
         const indicator = document.getElementById('indicator');
-        const targetX = element.offsetLeft - 6; 
-        const targetWidth = element.offsetWidth;
-
-        indicator.style.transform = `translateX(${targetX}px)`;
-        indicator.style.width = `${targetWidth}px`;
+        if (indicator) {
+            const targetX = element.offsetLeft - 6; 
+            const targetWidth = element.offsetWidth;
+            indicator.style.transform = `translateX(${targetX}px)`;
+            indicator.style.width = `${targetWidth}px`;
+        }
     }
 
     // --- Animacja Fade-Out dla Tekstów ---
@@ -70,21 +71,21 @@ function changeLanguage(lang, element) {
     const btn = document.getElementById('main-btn');
     const caption = document.getElementById('gallery-caption');
 
-    title.classList.add('fade-out');
-    desc.classList.add('fade-out');
-    btn.classList.add('fade-out');
-    caption.classList.add('fade-out');
+    if (title) title.classList.add('fade-out');
+    if (desc) desc.classList.add('fade-out');
+    if (btn) btn.classList.add('fade-out');
+    if (caption) caption.classList.add('fade-out');
 
     setTimeout(() => {
-        title.innerText = translations[lang].title;
-        desc.innerText = translations[lang].desc;
-        btn.innerText = translations[lang].btn;
-        caption.innerText = translations[lang].captions[currentImgIndex];
+        if (title) title.innerText = translations[lang].title;
+        if (desc) desc.innerText = translations[lang].desc;
+        if (btn) btn.innerText = translations[lang].btn;
+        if (caption) caption.innerText = translations[lang].captions[currentImgIndex];
 
-        title.classList.remove('fade-out');
-        desc.classList.remove('fade-out');
-        btn.classList.remove('fade-out');
-        caption.classList.remove('fade-out');
+        if (title) title.classList.remove('fade-out');
+        if (desc) desc.classList.remove('fade-out');
+        if (btn) btn.classList.remove('fade-out');
+        if (caption) caption.classList.remove('fade-out');
     }, 250);
 
     // Aktualizacja klas tekstowych aktywności dla przycisków
@@ -97,7 +98,6 @@ function changeLanguage(lang, element) {
 
 // Inicjalizacja: Wykrywanie języka kraju użytkownika po załadowaniu strony
 window.onload = function() {
-    // navigator.language zwraca np. "pl", "pl-PL", "de", "de-DE", "en-US"
     const userLanguage = (navigator.language || navigator.userLanguage).toLowerCase();
     let detectedLang = 'en'; // Domyślnie angielski dla reszty świata
 
@@ -116,16 +116,18 @@ function updateGallery() {
     const imgElement = document.getElementById('gallery-img');
     const captionElement = document.getElementById('gallery-caption');
     
-    imgElement.classList.add('fade-out');
-    captionElement.classList.add('fade-out');
-    
-    setTimeout(() => {
-        imgElement.src = images[currentImgIndex];
-        captionElement.innerText = translations[currentLang].captions[currentImgIndex];
+    if (imgElement && captionElement) {
+        imgElement.classList.add('fade-out');
+        captionElement.classList.add('fade-out');
         
-        imgElement.classList.remove('fade-out');
-        captionElement.classList.remove('fade-out');
-    }, 250);
+        setTimeout(() => {
+            imgElement.src = images[currentImgIndex];
+            captionElement.innerText = translations[currentLang].captions[currentImgIndex];
+            
+            imgElement.classList.remove('fade-out');
+            captionElement.classList.remove('fade-out');
+        }, 250);
+    }
 }
 
 function nextImage() {
@@ -142,12 +144,14 @@ function prevImage() {
 function epicAction() {
     alert(translations[currentLang].alert);
 }
+
 // --- KONFIGURACJA SUPABASE ---
 // Zmień poniższe adresy na własne z panelu Supabase (Settings -> API)
 const SUPABASE_URL = "https://TWÓJ-PROJEKT.supabase.co";
 const SUPABASE_ANON_KEY = "TWÓJ_KLUCZ_ANON_KEY";
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Poprawiona inicjalizacja klienta window.supabase (zapobiega konfliktom nazw)
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 const emailInput = document.getElementById('auth-email');
 const passwordInput = document.getElementById('auth-password');
@@ -156,60 +160,75 @@ const registerBtn = document.getElementById('btn-register');
 const statusText = document.getElementById('auth-status');
 
 function updateStatus(message, isSuccess = false) {
-    statusText.innerText = message;
-    statusText.className = isSuccess ? 'status-success' : 'status-error';
+    if (statusText) {
+        statusText.innerText = message;
+        statusText.className = isSuccess ? 'status-success' : 'status-error';
+    }
+}
+
+// Sprawdzenie, czy skrypt Supabase został załadowany w HTML
+if (!supabaseClient) {
+    console.error("Nie znaleziono biblioteki Supabase. Upewnij się, że dodałeś tag <script> Supabase w sekcji <head>.");
 }
 
 // LOGOWANIE
-loginBtn.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+if (loginBtn) {
+    loginBtn.addEventListener('click', async () => {
+        if (!supabaseClient) return;
+        
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
 
-    if (!email || !password) {
-        updateStatus("Proszę uzupełnić e-mail oraz hasło.");
-        return;
-    }
+        if (!email || !password) {
+            updateStatus("Proszę uzupełnić e-mail oraz hasło.");
+            return;
+        }
 
-    updateStatus("Trwa logowanie...", true);
+        updateStatus("Trwa logowanie...", true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
+
+        if (error) {
+            updateStatus(`Błąd logowania: ${error.message}`, false);
+        } else {
+            updateStatus("Zalogowano pomyślnie!", true);
+            console.log("Użytkownik:", data.user);
+        }
     });
-
-    if (error) {
-        updateStatus(`Błąd logowania: ${error.message}`, false);
-    } else {
-        updateStatus("Zalogowano pomyślnie!", true);
-        console.log("Użytkownik:", data.user);
-    }
-});
+}
 
 // REJESTRACJA
-registerBtn.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
+if (registerBtn) {
+    registerBtn.addEventListener('click', async () => {
+        if (!supabaseClient) return;
 
-    if (!email || !password) {
-        updateStatus("Wypełnij oba pola, aby założyć konto.");
-        return;
-    }
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
 
-    if (password.length < 6) {
-        updateStatus("Hasło musi składać się z co najmniej 6 znaków.");
-        return;
-    }
+        if (!email || !password) {
+            updateStatus("Wypełnij oba pola, aby założyć konto.");
+            return;
+        }
 
-    updateStatus("Tworzenie konta...", true);
+        if (password.length < 6) {
+            updateStatus("Hasło musi składać się z co najmniej 6 znaków.");
+            return;
+        }
 
-    const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
+        updateStatus("Tworzenie konta...", true);
+
+        const { data, error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+        });
+
+        if (error) {
+            updateStatus(`Błąd rejestracji: ${error.message}`, false);
+        } else {
+            updateStatus("Konto utworzone! Sprawdź e-mail, aby je aktywować.", true);
+        }
     });
-
-    if (error) {
-        updateStatus(`Błąd rejestracji: ${error.message}`, false);
-    } else {
-        updateStatus("Konto utworzone! Sprawdź e-mail, aby je aktywować.", true);
-    }
-});
+}
