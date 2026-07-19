@@ -147,8 +147,8 @@ function epicAction() {
 
 // --- KONFIGURACJA SUPABASE ---
 // Zmień poniższe adresy na własne z panelu Supabase (Settings -> API)
-const SUPABASE_URL = "https://TWÓJ-PROJEKT.supabase.co";
-const SUPABASE_ANON_KEY = "TWÓJ_KLUCZ_ANON_KEY";
+const SUPABASE_URL = "https://nodhzftlthehqyogoqru.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vZGh6ZnRsdGhlaHF5b2dvcXJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzkyMjksImV4cCI6MjEwMDA1NTIyOX0.EdL4pC86Hn0jLkRxPEqtyP8vAYxntwqaOYaOyhWoh7c";
 
 // Fikcyjna domena służąca do maskowania nicków jako e-mail dla Supabase
 const NICK_DOMAIN = "@twojadomena.internal";
