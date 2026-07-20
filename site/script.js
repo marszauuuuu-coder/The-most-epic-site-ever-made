@@ -8,8 +8,8 @@ const images = [
 ];
 
 let currentImgIndex = 0;
-let currentLang = 'en'; // Domyślny język awaryjny
-let loggedInUser = null; // Przechowuje nick zalogowanego użytkownika
+let currentLang = 'en'; 
+let loggedInUser = null; 
 
 // Baza tłumaczeń dla 3 języków
 const translations = {
@@ -52,7 +52,6 @@ const translations = {
 // 2. LOGIKA ZMIANY JĘZYKA STRONY
 // ==========================================
 function changeLanguage(lang, element) {
-    // Jeżeli element menu nie został przekazany (przy autodetekcji), szukamy go w DOM po atrybucie onclick
     if (!element) {
         element = Array.from(document.querySelectorAll('.lang-btn')).find(b => {
             const onclickAttr = b.getAttribute('onclick');
@@ -62,7 +61,6 @@ function changeLanguage(lang, element) {
 
     currentLang = lang;
 
-    // Płynny ruch neonowej obwódki (indykatora)
     if (element) {
         const indicator = document.getElementById('indicator');
         if (indicator) {
@@ -73,13 +71,11 @@ function changeLanguage(lang, element) {
         }
     }
 
-    // Pobranie elementów do przetłumaczenia
     const title = document.getElementById('main-title');
     const desc = document.getElementById('main-desc');
     const btn = document.getElementById('main-btn');
     const caption = document.getElementById('gallery-caption');
 
-    // Animacja Fade-Out
     if (title) title.classList.add('fade-out');
     if (desc) desc.classList.add('fade-out');
     if (btn) btn.classList.add('fade-out');
@@ -91,14 +87,12 @@ function changeLanguage(lang, element) {
         if (btn) btn.innerText = translations[lang].btn;
         if (caption) caption.innerText = translations[lang].captions[currentImgIndex];
 
-        // Animacja Fade-In
         if (title) title.classList.remove('fade-out');
         if (desc) desc.classList.remove('fade-out');
         if (btn) btn.classList.remove('fade-out');
         if (caption) caption.classList.remove('fade-out');
     }, 250);
 
-    // Wizualne przełączenie klasy active na przyciskach
     const buttons = document.querySelectorAll('.lang-btn');
     buttons.forEach(b => b.classList.remove('active'));
     if (element) {
@@ -140,16 +134,12 @@ function prevImage() {
 // ==========================================
 // 4. KONFIGURACJA I OBSŁUGA SUPABASE
 // ==========================================
-// Twoje oryginalne klucze Supabase
 const SUPABASE_URL = "https://nodhzftlthehqyogoqru.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vZGh6ZnRsdGhlaHF5b2dvcXJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0NzkyMjksImV4cCI6MjEwMDA1NTIyOX0.EdL4pC86Hn0jLkRxPEqtyP8vAYxntwqaOYaOyhWoh7c";
-
-// Domena wewnętrzna do maskowania nicków jako e-mail w bazie Supabase
 const NICK_DOMAIN = "@twojadomena.internal";
 
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-// Referencje do formularza w DOM
 const usernameInput = document.getElementById('auth-username'); 
 const passwordInput = document.getElementById('auth-password');
 const loginBtn = document.getElementById('btn-login');
@@ -161,13 +151,13 @@ function updateStatus(message, isSuccess = false) {
         statusText.innerText = message;
         statusText.className = isSuccess ? 'status-success' : 'status-error';
     }
+    showEpicToast(message, isSuccess ? 'success' : 'error');
 }
 
 if (!supabaseClient) {
-    console.error("Nie znaleziono biblioteki Supabase. Sprawdź poprawność skryptu CDN w sekcji HTML <head>.");
+    console.error("Nie znaleziono biblioteki Supabase.");
 }
 
-// Obsługa logowania użytkownika
 if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
         if (!supabaseClient) return;
@@ -176,14 +166,14 @@ if (loginBtn) {
         const password = passwordInput.value;
 
         if (!username || !password) {
-            updateStatus("Proszę uzupełnić nick oraz hasło.");
+            updateStatus("Proszę uzupełnić nick oraz hasło.", false);
             return;
         }
 
         updateStatus("Trwa logowanie...", true);
         const fakeEmail = `${username}${NICK_DOMAIN}`;
 
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
+        const { error } = await supabaseClient.auth.signInWithPassword({
             email: fakeEmail,
             password: password,
         });
@@ -191,14 +181,13 @@ if (loginBtn) {
         if (error) {
             updateStatus("Błąd logowania: Błędny nick lub hasło.", false);
         } else {
-            loggedInUser = username; // Zapisujemy zalogowanego gracza globalnie
+            loggedInUser = username;
             updateStatus(`Witaj ponownie, ${username}!`, true);
-            fetchLeaderboard(); // Odświeżamy ranking, by oznaczyć wiersz użytkownika
+            fetchLeaderboard();
         }
     });
 }
 
-// Obsługa rejestracji użytkownika
 if (registerBtn) {
     registerBtn.addEventListener('click', async () => {
         if (!supabaseClient) return;
@@ -207,19 +196,19 @@ if (registerBtn) {
         const password = passwordInput.value;
 
         if (!username || !password) {
-            updateStatus("Wypełnij oba pola, aby założyć konto.");
+            updateStatus("Wypełnij oba pola, aby założyć konto.", false);
             return;
         }
 
         if (password.length < 6) {
-            updateStatus("Hasło musi składać się z co najmniej 6 znaków.");
+            updateStatus("Hasło musi składać się z co najmniej 6 znaków.", false);
             return;
         }
 
         updateStatus("Tworzenie konta...", true);
         const fakeEmail = `${username}${NICK_DOMAIN}`;
 
-        const { data, error } = await supabaseClient.auth.signUp({
+        const { error } = await supabaseClient.auth.signUp({
             email: fakeEmail,
             password: password,
             options: {
@@ -236,10 +225,14 @@ if (registerBtn) {
 }
 
 // ==========================================
-// 5. SYSTEM RANKINGU (LEADERBOARD)
+// 5. SYSTEM RANKINGU I RANG
 // ==========================================
+function getRankTag(points) {
+    if (points >= 100) return `<span style="font-size: 0.65em; color: #ffd700; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">Mistrz</span>`;
+    if (points >= 50) return `<span style="font-size: 0.65em; color: #6c5ce7; border: 1px solid #6c5ce7; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">Wojownik</span>`;
+    return `<span style="font-size: 0.65em; color: #b2bec3; border: 1px solid #b2bec3; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">Nowicjusz</span>`;
+}
 
-// Pobieranie rankingu TOP 10 z bazy danych
 async function fetchLeaderboard() {
     if (!supabaseClient) return;
 
@@ -257,7 +250,7 @@ async function fetchLeaderboard() {
     const listElement = document.getElementById('leaderboard-list');
     if (!listElement) return;
 
-    listElement.innerHTML = ""; // Reset listy
+    listElement.innerHTML = ""; 
 
     if (data.length === 0) {
         listElement.innerHTML = `<p style="text-align:center; color:#636e72;">Brak graczy w rankingu. Zdobądź punkty jako pierwszy!</p>`;
@@ -266,15 +259,14 @@ async function fetchLeaderboard() {
 
     data.forEach((row, index) => {
         const isMe = row.username === loggedInUser ? " (Ty)" : "";
-        
-        // POPRAWKA: 'shadow' zamienione na 'box-shadow'
-        const rowStyle = isMe ? 'border-color: rgba(108, 92, 231, 0.5); background: rgba(108, 92, 231, 0.08); box-shadow: 0 0 10px rgba(108, 92, 231, 0.2);' : '';
+        const rowStyle = isMe ? 'border-color: rgba(0, 206, 201, 0.5); background: rgba(0, 206, 201, 0.08); box-shadow: 0 0 15px rgba(0, 206, 201, 0.2);' : '';
+        const rankBadge = getRankTag(row.points);
         
         const itemHtml = `
             <div class="leaderboard-item" style="${rowStyle}">
                 <div class="leaderboard-player">
                     <span class="rank">#${index + 1}</span>
-                    <span class="player-name">${row.username}${isMe}</span>
+                    <span class="player-name">${row.username}${isMe} ${rankBadge}</span>
                 </div>
                 <span class="player-points">${row.points} EP</span>
             </div>
@@ -283,7 +275,6 @@ async function fetchLeaderboard() {
     });
 }
 
-// Dodawanie punktów do konta w tabeli leaderboard
 async function addEpicPoints(amount) {
     if (!supabaseClient) return;
     if (!loggedInUser) {
@@ -291,7 +282,6 @@ async function addEpicPoints(amount) {
         return;
     }
 
-    // Sprawdzenie, czy użytkownik ma już jakikolwiek wpis punktowy w tabeli
     const { data: player } = await supabaseClient
         .from('leaderboard')
         .select('points')
@@ -299,38 +289,136 @@ async function addEpicPoints(amount) {
         .single();
 
     if (player) {
-        // Zwiększenie liczby punktów istniejącego rekordu
         const newPoints = player.points + amount;
         await supabaseClient
             .from('leaderboard')
             .update({ points: newPoints })
             .eq('username', loggedInUser);
     } else {
-        // Tworzenie od zera pierwszego wpisu punktowego dla gracza
         await supabaseClient
             .from('leaderboard')
             .insert([{ username: loggedInUser, points: amount }]);
     }
 
-    // Aktualizacja widoku tablicy wyników
     fetchLeaderboard();
 }
 
-// Główna akcja przycisku "Doświadcz Epickości"
 async function epicAction() {
-    alert(translations[currentLang].alert);
+    showEpicToast(translations[currentLang].alert, 'success');
     
     if (loggedInUser) {
-        // Przyznajemy zalogowanemu użytkownikowi 10 punktów epickości
         await addEpicPoints(10);
     }
 }
 
 // ==========================================
-// 6. INICJALIZACJA SYSTEMU (ONLOAD)
+// 6. SYSTEM POWIADOMIEŃ TOAST
+// ==========================================
+function showEpicToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `epic-toast ${type}`;
+    toast.innerHTML = `
+        <div class="toast-icon">${type === 'success' ? '⚡' : '🔥'}</div>
+        <div class="toast-message">${message}</div>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    }, 3000);
+}
+
+// ==========================================
+// 7. INTERAKTYWNE CZĄSTECZKI W TLE
+// ==========================================
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particlesArray = [];
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+const mouse = { x: null, y: null, radius: 150 };
+window.addEventListener('mousemove', (event) => {
+    mouse.x = event.x;
+    mouse.y = event.y;
+});
+
+class Particle {
+    constructor(x, y, directionX, directionY, size, color) {
+        this.x = x;
+        this.y = y;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.size = size;
+        this.color = color;
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+    update() {
+        if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+        if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < mouse.radius + this.size) {
+            if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 5;
+            if (mouse.x > this.x && this.x > this.size * 10) this.x -= 5;
+            if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 5;
+            if (mouse.y > this.y && this.y > this.size * 10) this.y -= 5;
+        }
+
+        this.x += this.directionX;
+        this.y += this.directionY;
+        this.draw();
+    }
+}
+
+function initParticles() {
+    particlesArray = [];
+    let numberOfParticles = (canvas.height * canvas.width) / 18000;
+    for (let i = 0; i < numberOfParticles; i++) {
+        let size = (Math.random() * 2) + 1;
+        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+        let directionX = (Math.random() * 1) - 0.5;
+        let directionY = (Math.random() * 1) - 0.5;
+        let color = 'rgba(0, 206, 201, 0.3)';
+        
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+    }
+}
+
+function animateParticles() {
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+    }
+}
+
+// ==========================================
+// 8. INICJALIZACJA SYSTEMU (ONLOAD)
 // ==========================================
 window.onload = function() {
-    // Autodetekcja języka przeglądarki użytkownika
     const userLanguage = (navigator.language || navigator.userLanguage).toLowerCase();
     let detectedLang = 'en'; 
 
@@ -340,9 +428,9 @@ window.onload = function() {
         detectedLang = 'de';
     }
 
-    // Uruchomienie języka startowego
     changeLanguage(detectedLang);
-    
-    // Załadowanie aktualnego stanu rankingu z Supabase
     fetchLeaderboard();
+    
+    initParticles();
+    animateParticles();
 };
