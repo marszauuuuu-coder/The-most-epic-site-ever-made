@@ -11,7 +11,7 @@ let currentImgIndex = 0;
 let currentLang = 'en'; 
 let loggedInUser = null; 
 
-// Baza tłumaczeń dla 3 języków
+// Potężna baza tłumaczeń dla całego interfejsu
 const translations = {
     pl: {
         title: "Najbardziej epicka strona, jaka kiedykolwiek powstała",
@@ -22,7 +22,31 @@ const translations = {
             "Epicki Widok 1: Cyfrowe płótno przyszłości",
             "Epicki Widok 2: Architektura jutra",
             "Epicki Widok 3: Abstrakcyjna eksplozja kolorów"
-        ]
+        ],
+        authTitle: "Panel Wojownika",
+        authSubtitle: "Zaloguj się nickiem, aby zbierać punkty",
+        labelUsername: "Twój unikalny Nick",
+        placeholderUsername: "Wpisz swój nick...",
+        labelPassword: "Hasło",
+        btnLogin: "Zaloguj",
+        btnRegister: "Rejestracja",
+        leaderboardTitle: "🏆 Najbardziej Epicy Gracze",
+        leaderboardSubtitle: "Klikaj główny przycisk i dominuj w rankingu!",
+        leaderboardLoading: "Ładowanie rankingu...",
+        leaderboardEmpty: "Brak graczy w rankingu. Zdobądź punkty jako pierwszy!",
+        rankMaster: "Mistrz",
+        rankWarrior: "Wojownik",
+        rankNovice: "Nowicjusz",
+        rankYou: "(Ty)",
+        msgEmptyFields: "Proszę uzupełnić nick oraz hasło.",
+        msgLoginProgress: "Trwa logowanie...",
+        msgLoginErr: "Błąd logowania: Błędny nick lub hasło.",
+        msgLoginSuccess: "Witaj ponownie, ",
+        msgRegShort: "Hasło musi składać się z co najmniej 6 znaków.",
+        msgRegProgress: "Tworzenie konta...",
+        msgRegErr: "Błąd rejestracji: ",
+        msgRegSuccess: "Konto utworzone pomyślnie! Możesz się teraz zalogować.",
+        msgNotLoggedIn: "Musisz być zalogowany, aby zbierać punkty!"
     },
     en: {
         title: "The most epic site ever made",
@@ -33,7 +57,31 @@ const translations = {
             "Epic View 1: The digital canvas of the future",
             "Epic View 2: The architecture of tomorrow",
             "Epic View 3: Abstract explosion of colors"
-        ]
+        ],
+        authTitle: "Warrior Panel",
+        authSubtitle: "Login with your nickname to collect points",
+        labelUsername: "Your unique Nickname",
+        placeholderUsername: "Enter your nickname...",
+        labelPassword: "Password",
+        btnLogin: "Login",
+        btnRegister: "Register",
+        leaderboardTitle: "🏆 The Most Epic Players",
+        leaderboardSubtitle: "Click the main button and dominate the ranking!",
+        leaderboardLoading: "Loading leaderboard...",
+        leaderboardEmpty: "No players in the ranking. Be the first to score!",
+        rankMaster: "Master",
+        rankWarrior: "Warrior",
+        rankNovice: "Novice",
+        rankYou: "(You)",
+        msgEmptyFields: "Please fill in both nickname and password.",
+        msgLoginProgress: "Logging in...",
+        msgLoginErr: "Login error: Invalid nickname or password.",
+        msgLoginSuccess: "Welcome back, ",
+        msgRegShort: "Password must be at least 6 characters long.",
+        msgRegProgress: "Creating account...",
+        msgRegErr: "Registration error: ",
+        msgRegSuccess: "Account created successfully! You can now log in.",
+        msgNotLoggedIn: "You must be logged in to collect points!"
     },
     de: {
         title: "Die epischste Website, die je erstellt wurde",
@@ -44,7 +92,31 @@ const translations = {
             "Epische Ansicht 1: Die digitale Leinwand der Zukunft",
             "Epische Ansicht 2: Die Architektur von morgen",
             "Epische Ansicht 3: Abstrakte Farbexplosion"
-        ]
+        ],
+        authTitle: "Krieger-Panel",
+        authSubtitle: "Melden Sie sich mit Ihrem Nicknamen an, um Punkte zu sammeln",
+        labelUsername: "Dein einzigartiger Nickname",
+        placeholderUsername: "Gib deinen Nicknamen ein...",
+        labelPassword: "Passwort",
+        btnLogin: "Anmelden",
+        btnRegister: "Registrieren",
+        leaderboardTitle: "🏆 Die epischsten Spieler",
+        leaderboardSubtitle: "Klicke auf den Hauptbutton und dominiere das Ranking!",
+        leaderboardLoading: "Ranking wird geladen...",
+        leaderboardEmpty: "Keine Spieler im Ranking. Hol dir als Erster Punkte!",
+        rankMaster: "Meister",
+        rankWarrior: "Krieger",
+        rankNovice: "Neuling",
+        rankYou: "(Du)",
+        msgEmptyFields: "Bitte füllen Sie Nickname und Passwort aus.",
+        msgLoginProgress: "Anmeldung läuft...",
+        msgLoginErr: "Anmeldefehler: Falscher Nickname oder Passwort.",
+        msgLoginSuccess: "Willkommen zurück, ",
+        msgRegShort: "Das Passwort muss mindestens 6 Zeichen lang sein.",
+        msgRegProgress: "Konto wird erstellt...",
+        msgRegErr: "Registrierungsfehler: ",
+        msgRegSuccess: "Konto erfolgreich erstellt! Du kannst dich jetzt einloggen.",
+        msgNotLoggedIn: "Du musst eingeloggt sein, um Punkte zu sammeln!"
     }
 };
 
@@ -60,6 +132,7 @@ function changeLanguage(lang, element) {
     }
 
     currentLang = lang;
+    const t = translations[lang];
 
     if (element) {
         const indicator = document.getElementById('indicator');
@@ -71,26 +144,39 @@ function changeLanguage(lang, element) {
         }
     }
 
-    const title = document.getElementById('main-title');
-    const desc = document.getElementById('main-desc');
-    const btn = document.getElementById('main-btn');
-    const caption = document.getElementById('gallery-caption');
+    // Lista elementów do zmiany tekstu
+    const elementsToUpdate = [
+        { el: document.getElementById('main-title'), text: t.title },
+        { el: document.getElementById('main-desc'), text: t.desc },
+        { el: document.getElementById('main-btn'), text: t.btn },
+        { el: document.getElementById('gallery-caption'), text: t.captions[currentImgIndex] },
+        { el: document.getElementById('auth-title'), text: t.authTitle },
+        { el: document.getElementById('auth-subtitle'), text: t.authSubtitle },
+        { el: document.getElementById('label-username'), text: t.labelUsername },
+        { el: document.getElementById('label-password'), text: t.labelPassword },
+        { el: document.getElementById('btn-login'), text: t.btnLogin },
+        { el: document.getElementById('btn-register'), text: t.btnRegister },
+        { el: document.getElementById('leaderboard-title'), text: t.leaderboardTitle },
+        { el: document.getElementById('leaderboard-subtitle'), text: t.leaderboardSubtitle }
+    ];
 
-    if (title) title.classList.add('fade-out');
-    if (desc) desc.classList.add('fade-out');
-    if (btn) btn.classList.add('fade-out');
-    if (caption) caption.classList.add('fade-out');
+    const inputUsername = document.getElementById('auth-username');
+    const loadingText = document.getElementById('leaderboard-loading');
+
+    // Animacja wygaszania
+    elementsToUpdate.forEach(item => { if (item.el) item.el.classList.add('fade-out'); });
 
     setTimeout(() => {
-        if (title) title.innerText = translations[lang].title;
-        if (desc) desc.innerText = translations[lang].desc;
-        if (btn) btn.innerText = translations[lang].btn;
-        if (caption) caption.innerText = translations[lang].captions[currentImgIndex];
+        // Podmiana tekstu
+        elementsToUpdate.forEach(item => { if (item.el) item.el.innerText = item.text; });
+        if (inputUsername) inputUsername.placeholder = t.placeholderUsername;
+        if (loadingText) loadingText.innerText = t.leaderboardLoading;
+        
+        // Odświeżenie rankingu (żeby zaktualizować odznaki na nowy język)
+        fetchLeaderboard();
 
-        if (title) title.classList.remove('fade-out');
-        if (desc) desc.classList.remove('fade-out');
-        if (btn) btn.classList.remove('fade-out');
-        if (caption) caption.classList.remove('fade-out');
+        // Animacja pojawiania się
+        elementsToUpdate.forEach(item => { if (item.el) item.el.classList.remove('fade-out'); });
     }, 250);
 
     const buttons = document.querySelectorAll('.lang-btn');
@@ -154,23 +240,20 @@ function updateStatus(message, isSuccess = false) {
     showEpicToast(message, isSuccess ? 'success' : 'error');
 }
 
-if (!supabaseClient) {
-    console.error("Nie znaleziono biblioteki Supabase.");
-}
-
 if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
         if (!supabaseClient) return;
+        const t = translations[currentLang];
         
         const username = usernameInput.value.trim();
         const password = passwordInput.value;
 
         if (!username || !password) {
-            updateStatus("Proszę uzupełnić nick oraz hasło.", false);
+            updateStatus(t.msgEmptyFields, false);
             return;
         }
 
-        updateStatus("Trwa logowanie...", true);
+        updateStatus(t.msgLoginProgress, true);
         const fakeEmail = `${username}${NICK_DOMAIN}`;
 
         const { error } = await supabaseClient.auth.signInWithPassword({
@@ -179,10 +262,10 @@ if (loginBtn) {
         });
 
         if (error) {
-            updateStatus("Błąd logowania: Błędny nick lub hasło.", false);
+            updateStatus(t.msgLoginErr, false);
         } else {
             loggedInUser = username;
-            updateStatus(`Witaj ponownie, ${username}!`, true);
+            updateStatus(`${t.msgLoginSuccess}${username}!`, true);
             fetchLeaderboard();
         }
     });
@@ -191,35 +274,34 @@ if (loginBtn) {
 if (registerBtn) {
     registerBtn.addEventListener('click', async () => {
         if (!supabaseClient) return;
+        const t = translations[currentLang];
 
         const username = usernameInput.value.trim();
         const password = passwordInput.value;
 
         if (!username || !password) {
-            updateStatus("Wypełnij oba pola, aby założyć konto.", false);
+            updateStatus(t.msgEmptyFields, false);
             return;
         }
 
         if (password.length < 6) {
-            updateStatus("Hasło musi składać się z co najmniej 6 znaków.", false);
+            updateStatus(t.msgRegShort, false);
             return;
         }
 
-        updateStatus("Tworzenie konta...", true);
+        updateStatus(t.msgRegProgress, true);
         const fakeEmail = `${username}${NICK_DOMAIN}`;
 
         const { error } = await supabaseClient.auth.signUp({
             email: fakeEmail,
             password: password,
-            options: {
-                data: { display_name: username }
-            }
+            options: { data: { display_name: username } }
         });
 
         if (error) {
-            updateStatus(`Błąd rejestracji: ${error.message}`, false);
+            updateStatus(`${t.msgRegErr}${error.message}`, false);
         } else {
-            updateStatus("Konto utworzone pomyślnie! Możesz się teraz zalogować.", true);
+            updateStatus(t.msgRegSuccess, true);
         }
     });
 }
@@ -228,13 +310,15 @@ if (registerBtn) {
 // 5. SYSTEM RANKINGU I RANG
 // ==========================================
 function getRankTag(points) {
-    if (points >= 100) return `<span style="font-size: 0.65em; color: #ffd700; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">Mistrz</span>`;
-    if (points >= 50) return `<span style="font-size: 0.65em; color: #6c5ce7; border: 1px solid #6c5ce7; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">Wojownik</span>`;
-    return `<span style="font-size: 0.65em; color: #b2bec3; border: 1px solid #b2bec3; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">Nowicjusz</span>`;
+    const t = translations[currentLang];
+    if (points >= 100) return `<span style="font-size: 0.65em; color: #ffd700; border: 1px solid #ffd700; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">${t.rankMaster}</span>`;
+    if (points >= 50) return `<span style="font-size: 0.65em; color: #6c5ce7; border: 1px solid #6c5ce7; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">${t.rankWarrior}</span>`;
+    return `<span style="font-size: 0.65em; color: #b2bec3; border: 1px solid #b2bec3; padding: 2px 8px; border-radius: 12px; margin-left: 8px; text-transform: uppercase; letter-spacing: 1px;">${t.rankNovice}</span>`;
 }
 
 async function fetchLeaderboard() {
     if (!supabaseClient) return;
+    const t = translations[currentLang];
 
     const { data, error } = await supabaseClient
         .from('leaderboard')
@@ -242,24 +326,24 @@ async function fetchLeaderboard() {
         .order('points', { ascending: false })
         .limit(10);
 
+    const listElement = document.getElementById('leaderboard-list');
+    if (!listElement) return;
+
     if (error) {
         console.error("Błąd pobierania rankingu:", error.message);
         return;
     }
 
-    const listElement = document.getElementById('leaderboard-list');
-    if (!listElement) return;
-
     listElement.innerHTML = ""; 
 
     if (data.length === 0) {
-        listElement.innerHTML = `<p style="text-align:center; color:#636e72;">Brak graczy w rankingu. Zdobądź punkty jako pierwszy!</p>`;
+        listElement.innerHTML = `<p style="text-align:center; color:#636e72;">${t.leaderboardEmpty}</p>`;
         return;
     }
 
     data.forEach((row, index) => {
-        const isMe = row.username === loggedInUser ? " (Ty)" : "";
-        const rowStyle = isMe ? 'border-color: rgba(0, 206, 201, 0.5); background: rgba(0, 206, 201, 0.08); box-shadow: 0 0 15px rgba(0, 206, 201, 0.2);' : '';
+        const isMe = row.username === loggedInUser ? ` <span style="opacity: 0.7;">${t.rankYou}</span>` : "";
+        const rowStyle = row.username === loggedInUser ? 'border-color: rgba(0, 206, 201, 0.5); background: rgba(0, 206, 201, 0.08); box-shadow: 0 0 15px rgba(0, 206, 201, 0.2);' : '';
         const rankBadge = getRankTag(row.points);
         
         const itemHtml = `
@@ -277,8 +361,10 @@ async function fetchLeaderboard() {
 
 async function addEpicPoints(amount) {
     if (!supabaseClient) return;
+    const t = translations[currentLang];
+
     if (!loggedInUser) {
-        updateStatus("Musisz być zalogowany, aby zbierać punkty za zadania!", false);
+        updateStatus(t.msgNotLoggedIn, false);
         return;
     }
 
@@ -304,7 +390,8 @@ async function addEpicPoints(amount) {
 }
 
 async function epicAction() {
-    showEpicToast(translations[currentLang].alert, 'success');
+    const t = translations[currentLang];
+    showEpicToast(t.alert, 'success');
     
     if (loggedInUser) {
         await addEpicPoints(10);
