@@ -30,7 +30,7 @@ const translations = {
         labelPassword: "Hasło",
         btnLogin: "Zaloguj",
         btnRegister: "Rejestracja",
-        leaderboardTitle: "🏆 Najbardziej Epicy Gracze",
+        leaderboardTitle: "🏆 Najbardziej Epiccy Gracze 🏆",
         leaderboardSubtitle: "Klikaj główny przycisk i dominuj w rankingu!",
         leaderboardLoading: "Ładowanie rankingu...",
         leaderboardEmpty: "Brak graczy w rankingu. Zdobądź punkty jako pierwszy!",
