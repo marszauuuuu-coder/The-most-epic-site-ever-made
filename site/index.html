@@ -4,21 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Epicka Strona z Rankingiem</title>
-    <!-- Łączenie z plikiem CSS -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- KLUCZOWE: Biblioteka Supabase wczytywana z CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <!-- Animowane Epickie Tło -->
     <div class="background-glow"></div>
-    
-    <!-- Płótno na interaktywne cząsteczki -->
     <canvas id="particle-canvas"></canvas>
 
-    <!-- Wybór Języka z płynnym wskaźnikiem (id="indicator") -->
     <div class="lang-switcher">
         <div class="nav-indicator" id="indicator"></div>
         <button class="lang-btn active" onclick="changeLanguage('pl', this)">PL</button>
@@ -26,37 +19,34 @@
         <button class="lang-btn" onclick="changeLanguage('de', this)">DE</button>
     </div>
 
-    <!-- Główna Zawartość Strony -->
     <div class="main-container">
         <h1 id="main-title">Najbardziej epicka strona, jaka kiedykolwiek powstała</h1>
         <p id="main-desc">Witamy w cyfrowym arcydziele. Ta strona została stworzona, aby zachwycać, inspirować i przekraczać granice zwykłego internetu. Poczuj czystą moc nowoczesnego designu.</p>
         <button class="epic-btn" id="main-btn" onclick="epicAction()">Doświadcz Epickości</button>
     </div>
 
-    <!-- Przeglądarka Zdjęć (Karuzela) -->
     <div class="gallery-container">
         <div class="gallery-slider">
             <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" id="gallery-img" alt="Epic view">
             <div class="gallery-caption" id="gallery-caption">Epicki Widok 1: Cyfrowe płótno przyszłości</div>
-            
             <button class="nav-btn prev-btn" onclick="prevImage()">❮</button>
             <button class="nav-btn next-btn" onclick="nextImage()">❯</button>
         </div>
     </div>
 
-    <!-- System Autoryzacji oparty na NICKACH (Glassmorphism) -->
+    <!-- Panel Logowania -->
     <div class="glass-card">
         <div class="auth-box">
-            <h2>Panel Wojownika</h2>
-            <p class="auth-subtitle">Zaloguj się nickiem, aby zbierać punkty</p>
+            <h2 id="auth-title">Panel Wojownika</h2>
+            <p class="auth-subtitle" id="auth-subtitle">Zaloguj się nickiem, aby zbierać punkty</p>
             
             <div class="input-group">
-                <label for="auth-username">Twój unikalny Nick</label>
+                <label for="auth-username" id="label-username">Twój unikalny Nick</label>
                 <input type="text" id="auth-username" placeholder="Wpisz swój nick...">
             </div>
             
             <div class="input-group">
-                <label for="auth-password">Hasło</label>
+                <label for="auth-password" id="label-password">Hasło</label>
                 <input type="password" id="auth-password" placeholder="••••••••">
             </div>
             
@@ -69,20 +59,18 @@
         </div>
     </div>
 
-    <!-- TABLICA WYNIKÓW (Leaderboard) -->
+    <!-- Ranking -->
     <div class="glass-card leaderboard-card">
-        <h2>🏆 Najbardziej Epicy Gracze</h2>
-        <p class="auth-subtitle">Klikaj główny przycisk i dominuj w rankingu!</p>
+        <h2 id="leaderboard-title">🏆 Najbardziej Epicy Gracze</h2>
+        <p class="auth-subtitle" id="leaderboard-subtitle">Klikaj główny przycisk i dominuj w rankingu!</p>
         
         <div class="leaderboard-list" id="leaderboard-list">
-            <p style="text-align:center; color:#636e72;">Ładowanie rankingu...</p>
+            <p style="text-align:center; color:#636e72;" id="leaderboard-loading">Ładowanie rankingu...</p>
         </div>
     </div>
 
-    <!-- Kontener na epickie powiadomienia Toast -->
     <div id="toast-container"></div>
 
-    <!-- Łączenie z plikiem JavaScript na samym końcu body -->
     <script src="script.js"></script>
 </body>
 </html>
