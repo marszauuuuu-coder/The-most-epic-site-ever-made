@@ -359,6 +359,14 @@ p {
 .leaderboard-card {
     max-width: 500px !important;
     margin: 2rem auto !important;
+    text-align: center; /* Wyśrodkowanie całej zawartości karty */
+}
+
+/* Wyśrodkowanie głównego nagłówka i podtytułu rankingu */
+.leaderboard-card h2,
+.leaderboard-card .auth-subtitle {
+    text-align: center;
+    width: 100%;
 }
 
 .leaderboard-list {
@@ -369,6 +377,7 @@ p {
     max-height: 300px;
     overflow-y: auto;
     padding-right: 5px;
+    text-align: left; /* Lista graczy zostaje czytelnie wyrównana do lewej */
 }
 
 .leaderboard-item {
