@@ -34,6 +34,17 @@ body {
     pointer-events: none;
 }
 
+/* --- Płótno na Interaktywne Cząsteczki --- */
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
 /* --- Wybór Języka (Prawy Górny Róg) --- */
 .lang-switcher {
     position: fixed;
@@ -148,6 +159,8 @@ p {
 
 /* --- Formularz Supabase (Glassmorphism) --- */
 .glass-card {
+    position: relative;
+    z-index: 2;
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -227,7 +240,6 @@ p {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dostosowanie przycisków do motywu strony (Cyan / Purple) */
 .btn-primary {
     background: linear-gradient(45deg, #6c5ce7, #00ceca);
     color: #ffffff;
@@ -343,24 +355,7 @@ p {
 .prev-btn { left: 20px; }
 .next-btn { right: 20px; }
 
-/* --- Animacje --- */
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* --- Responsywność --- */
-@media (max-width: 600px) {
-    body { padding-top: 80px; gap: 40px; }
-    h1 { font-size: 2.2rem; }
-    p { font-size: 1rem; }
-    .gallery-container { height: 280px; }
-    .nav-btn { padding: 10px 14px; font-size: 1rem; }
-    .lang-switcher { top: 10px; right: 10px; }
-    .glass-card { padding: 1.5rem 1rem; }
-}
-
+/* --- Leaderboard --- */
 .leaderboard-card {
     max-width: 500px !important;
     margin: 2rem auto !important;
@@ -376,7 +371,6 @@ p {
     padding-right: 5px;
 }
 
-/* Wiersz rankingu */
 .leaderboard-item {
     display: flex;
     justify-content: space-between;
@@ -401,18 +395,72 @@ p {
     font-weight: 500;
 }
 
-/* Styl dla TOP 3 */
 .rank {
     font-weight: 800;
     width: 24px;
     color: #b2bec3;
 }
-.leaderboard-item:nth-child(1) .rank { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); } /* Złoto */
-.leaderboard-item:nth-child(2) .rank { color: #c0c0c0; } /* Srebro */
-.leaderboard-item:nth-child(3) .rank { color: #cd7f32; } /* Brąz */
+.leaderboard-item:nth-child(1) .rank { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+.leaderboard-item:nth-child(2) .rank { color: #c0c0c0; }
+.leaderboard-item:nth-child(3) .rank { color: #cd7f32; }
 
 .player-points {
     color: #00ceca;
     font-weight: 700;
     text-shadow: 0 0 8px rgba(0, 206, 201, 0.3);
+}
+
+/* --- System Powiadomień (Toast) --- */
+#toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999;
+}
+
+.epic-toast {
+    background: rgba(10, 10, 18, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 206, 201, 0.3);
+    padding: 16px 24px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #fff;
+    font-weight: 500;
+    transform: translateX(150%);
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 206, 201, 0.1);
+}
+
+.epic-toast.show {
+    transform: translateX(0);
+}
+
+.epic-toast.success { border-left: 4px solid #00ceca; }
+.epic-toast.error { border-left: 4px solid #ff7675; }
+
+.toast-icon { font-size: 1.5rem; }
+
+/* --- Animacje --- */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- Responsywność --- */
+@media (max-width: 600px) {
+    body { padding-top: 80px; gap: 40px; }
+    h1 { font-size: 2.2rem; }
+    p { font-size: 1rem; }
+    .gallery-container { height: 280px; }
+    .nav-btn { padding: 10px 14px; font-size: 1rem; }
+    .lang-switcher { top: 10px; right: 10px; }
+    .glass-card { padding: 1.5rem 1rem; }
 }
