@@ -14,6 +14,9 @@
 
     <!-- Animowane Epickie Tło -->
     <div class="background-glow"></div>
+    
+    <!-- Płótno na interaktywne cząsteczki -->
+    <canvas id="particle-canvas"></canvas>
 
     <!-- Wybór Języka z płynnym wskaźnikiem (id="indicator") -->
     <div class="lang-switcher">
@@ -71,11 +74,13 @@
         <h2>🏆 Najbardziej Epicy Gracze</h2>
         <p class="auth-subtitle">Klikaj główny przycisk i dominuj w rankingu!</p>
         
-        <!-- POPRAWKA: Zmiana class i id na leaderboard-list -->
         <div class="leaderboard-list" id="leaderboard-list">
             <p style="text-align:center; color:#636e72;">Ładowanie rankingu...</p>
         </div>
     </div>
+
+    <!-- Kontener na epickie powiadomienia Toast -->
+    <div id="toast-container"></div>
 
     <!-- Łączenie z plikiem JavaScript na samym końcu body -->
     <script src="script.js"></script>
