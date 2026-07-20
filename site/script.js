@@ -423,7 +423,7 @@ function showEpicToast(message, type = 'success') {
 }
 
 // ==========================================
-// 7. INTERAKTYWNE CZĄSTECZKI W TLE
+// 7. INTERAKTYWNE CZĄSTECZKI W TLE (ZE ZŁOTYM SEKRETEM)
 // ==========================================
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
@@ -444,20 +444,39 @@ window.addEventListener('mousemove', (event) => {
 });
 
 class Particle {
-    constructor(x, y, directionX, directionY, size, color) {
+    constructor(x, y, directionX, directionY, size, color, isGolden = false) {
         this.x = x;
         this.y = y;
         this.directionX = directionX;
         this.directionY = directionY;
         this.size = size;
         this.color = color;
+        this.isGolden = isGolden;
+        this.alpha = 1;
+        this.pulseDir = 0.02;
     }
+    
     draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
+        
+        if (this.isGolden) {
+            // Efekt pulsowania dla złotej cząsteczki
+            this.size += this.pulseDir;
+            if (this.size > 5 || this.size < 2.5) this.pulseDir = -this.pulseDir;
+            
+            ctx.fillStyle = '#ffd700';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#ffd700';
+        } else {
+            ctx.fillStyle = this.color;
+            ctx.shadowBlur = 0;
+        }
+        
         ctx.fill();
+        ctx.shadowBlur = 0; // Reset cienia, żeby nie muliło renderowania
     }
+
     update() {
         if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
         if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
@@ -482,6 +501,7 @@ class Particle {
 function initParticles() {
     particlesArray = [];
     let numberOfParticles = (canvas.height * canvas.width) / 18000;
+    
     for (let i = 0; i < numberOfParticles; i++) {
         let size = (Math.random() * 2) + 1;
         let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
@@ -490,8 +510,14 @@ function initParticles() {
         let directionY = (Math.random() * 1) - 0.5;
         let color = 'rgba(0, 206, 201, 0.3)';
         
-        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color, false));
     }
+
+    // Dodanie jednej ukrytej, złotej cząsteczki
+    let goldenSize = 3.5;
+    let gx = Math.random() * innerWidth;
+    let gy = Math.random() * innerHeight;
+    particlesArray.push(new Particle(gx, gy, 0.8, 0.8, goldenSize, '#ffd700', true));
 }
 
 function animateParticles() {
@@ -501,6 +527,34 @@ function animateParticles() {
         particlesArray[i].update();
     }
 }
+
+// Nasłuchiwanie kliknięcia w złotą cząsteczkę na kanasie tła
+canvas.addEventListener('click', async (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    // Szukamy złotej cząsteczki w tablicy
+    const goldenOne = particlesArray.find(p => p.isGolden);
+    if (!goldenOne) return;
+
+    let dx = clickX - goldenOne.x;
+    let dy = clickY - goldenOne.y;
+    let distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Jeśli gracz kliknął blisko złotej cząsteczki (promień 25px)
+    if (distance < 25) {
+        showEpicToast("🎉 Znalazłeś ukrytą Złotą Cząsteczkę! +50 punktów!", "success");
+        if (loggedInUser) {
+            await addEpicPoints(50);
+        }
+        
+        // Przenosimy złotą cząsteczkę w losowe miejsce na mapie
+        goldenOne.x = Math.random() * innerWidth;
+        goldenOne.y = Math.random() * innerHeight;
+    }
+});
+
 
 // ==========================================
 // 8. INICJALIZACJA SYSTEMU (ONLOAD)
